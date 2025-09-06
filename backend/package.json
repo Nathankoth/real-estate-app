@@ -1,0 +1,18 @@
+{
+  "name": "real-estate-backend",
+  "version": "1.0.0",
+  "description": "FastAPI backend for Real Estate App",
+  "main": "app.py",
+  "scripts": {
+    "start": "source venv/bin/activate && python -m uvicorn app:app --reload --host 0.0.0.0 --port 3001",
+    "dev": "source venv/bin/activate && python -m uvicorn app:app --reload --host 0.0.0.0 --port 3001",
+    "build": "echo 'Backend build complete'",
+    "install": "python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt"
+  },
+  "engines": {
+    "python": ">=3.8.0"
+  },
+  "keywords": ["fastapi", "python", "real-estate", "api"],
+  "author": "Real Estate App",
+  "license": "MIT"
+}
