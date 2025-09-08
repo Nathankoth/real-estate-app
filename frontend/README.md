@@ -1,22 +1,14 @@
-# Welcome to your Lovable project
+# VistaForge - AI-Powered Real Estate Visualization
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/5849087e-1f96-444b-9093-964e18fd3b65
+**VistaForge** is a full-stack real estate application that transforms property visualization with AI-powered technology, ROI calculations, and stunning property presentations.
 
 ## How can I edit this code?
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/5849087e-1f96-444b-9093-964e18fd3b65) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
 **Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+If you want to work locally using your own IDE, you can clone this repo and push changes.
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -62,12 +54,19 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/5849087e-1f96-444b-9093-964e18fd3b65) and click on Share -> Publish.
+This project is deployed on Vercel. You can deploy it by:
 
-## Can I connect a custom domain to my Lovable project?
+1. Push your changes to GitHub
+2. Connect your GitHub repository to Vercel
+3. Configure environment variables in Vercel dashboard
+4. Deploy automatically on every push
 
-Yes, you can!
+## Features
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- **AI-Powered Visualization**: Transform property photos into stunning visualizations
+- **ROI Calculator**: Accurate investment calculations for informed decisions
+- **Market Analytics**: Real-time market data and trends
+- **Design Tools**: Professional-grade design tools for property presentations
+- **3D Rendering**: Create immersive 3D property tours
+- **Authentication**: Secure user authentication with Supabase
+- **FastAPI Backend**: High-performance Python backend with AI integration
