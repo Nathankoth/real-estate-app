@@ -377,7 +377,7 @@ const Index = () => {
             <div className="space-y-4">
               <div className="flex items-center space-x-3">
                 <img 
-                  src="/favicon-192x192.png" 
+                  src="/lovable-uploads/61161983-4a0b-4332-b563-2ea8738fa49b.png" 
                   alt="Vista Forge Logo" 
                   className="h-12 w-auto"
                 />
