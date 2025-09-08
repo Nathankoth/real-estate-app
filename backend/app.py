@@ -1,7 +1,7 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import guide, finance, design, preview
+from routers import guide, finance, design, preview, roi
 
 app = FastAPI(title="RealEstate Vision API")
 
@@ -32,6 +32,7 @@ app.include_router(guide.router, prefix="/guide", tags=["guide"])
 app.include_router(finance.router, prefix="/finance", tags=["finance"])
 app.include_router(design.router, prefix="/design", tags=["design"])
 app.include_router(preview.router, prefix="/preview", tags=["preview"])
+app.include_router(roi.router, prefix="/roi", tags=["roi"])
 
 
 @app.post("/guide")  # must match frontend
