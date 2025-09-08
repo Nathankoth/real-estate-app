@@ -19,7 +19,7 @@ export function Navbar() {
         {/* Logo & Brand */}
         <Link to="/" className="flex items-center space-x-3">
           <img
-            src="/vistaforge-logo.png"
+            src="/favicon-32x32.png"
             alt="Vista Forge Logo"
             className="h-8 w-8"
           />
