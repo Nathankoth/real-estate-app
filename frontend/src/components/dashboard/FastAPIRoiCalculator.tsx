@@ -13,7 +13,7 @@ import { useROIEntries } from '@/hooks/useROIEntries';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
-// Removed old AI explanation hook - using new integrated API
+// Removed old AI explanation hook - using new integrated APIb 
 
 const ROICalculator = () => {
   // FastAPI ROI Calculator state
