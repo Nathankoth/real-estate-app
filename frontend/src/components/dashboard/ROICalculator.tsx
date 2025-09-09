@@ -281,21 +281,21 @@ const ROICalculator = () => {
   };
 
   return (
-    <div className="space-y-8 p-6">
+    <div className="space-y-6 p-4 sm:p-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">ROI Calculator</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">ROI Calculator</h1>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Calculate property investment returns with advanced metrics
           </p>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex flex-col space-y-2 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
           {/* Global Currency Selector */}
           <div className="flex items-center space-x-2">
             <Label htmlFor="global-currency" className="text-sm font-medium">Currency:</Label>
             <Select value={currency} onValueChange={setCurrency}>
-              <SelectTrigger className="w-24">
+              <SelectTrigger className="w-20 sm:w-24">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -308,29 +308,31 @@ const ROICalculator = () => {
             </Select>
           </div>
           <div className="flex items-center space-x-2">
-            <Calculator className="h-8 w-8 text-primary" />
-            <Badge variant="outline" className="text-sm">
+            <Calculator className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+            <Badge variant="outline" className="text-xs sm:text-sm">
               Professional Grade
             </Badge>
           </div>
         </div>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6 sm:space-y-8">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="simple" className="flex items-center space-x-2">
-            <Home className="h-4 w-4" />
-            <span>Simple (Beginner)</span>
+          <TabsTrigger value="simple" className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm">
+            <Home className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden xs:inline">Simple (Beginner)</span>
+            <span className="xs:hidden">Simple</span>
           </TabsTrigger>
-          <TabsTrigger value="advanced" className="flex items-center space-x-2">
-            <Building2 className="h-4 w-4" />
-            <span>Advanced (Pro)</span>
+          <TabsTrigger value="advanced" className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm">
+            <Building2 className="h-3 w-3 sm:h-4 sm:w-4" />
+            <span className="hidden xs:inline">Advanced (Pro)</span>
+            <span className="xs:hidden">Advanced</span>
           </TabsTrigger>
         </TabsList>
 
         {/* Simple Calculator */}
-        <TabsContent value="simple" className="space-y-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <TabsContent value="simple" className="space-y-6 sm:space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8">
             {/* Input Panel */}
             <Card>
               <CardHeader>
@@ -342,14 +344,14 @@ const ROICalculator = () => {
                   Perfect for beginners - just enter the basics for quick math and essential metrics
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-4 sm:space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="currency-select">Currency</Label>
                   <select
                     id="currency-select"
                     value={currency}
                     onChange={(e) => setCurrency(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                   >
                     <option value="$">USD ($)</option>
                     <option value="₦">NGN (₦)</option>
@@ -384,24 +386,26 @@ const ROICalculator = () => {
                     placeholder="10"
                     value={vacancyRate}
                     onChange={(e) => setVacancyRate(e.target.value)}
-                    className="p-3"
+                    className="p-2 sm:p-3 text-sm sm:text-base"
                   />
                 </div>
 
                 <Button 
                   onClick={calculateSimpleROI} 
                   disabled={loading}
-                  className="w-full h-12 text-lg"
+                  className="w-full h-10 sm:h-12 text-sm sm:text-lg"
                 >
                   {loading ? (
                     <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Calculating...
+                      <Loader2 className="mr-2 h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
+                      <span className="hidden sm:inline">Calculating...</span>
+                      <span className="sm:hidden">Calculating</span>
                     </>
                   ) : (
                     <>
-                      <Calculator className="mr-2 h-4 w-4" />
-                      Calculate Simple ROI
+                      <Calculator className="mr-2 h-3 w-3 sm:h-4 sm:w-4" />
+                      <span className="hidden sm:inline">Calculate Simple ROI</span>
+                      <span className="sm:hidden">Calculate ROI</span>
                     </>
                   )}
                 </Button>
@@ -423,23 +427,23 @@ const ROICalculator = () => {
                 {simpleResult ? (
                   <div className="space-y-6">
                     {/* Key Metrics - Simple (Only Cap Rate and NOI) */}
-                    <div className="grid grid-cols-1 gap-6">
-                      <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
+                    <div className="grid grid-cols-1 gap-4 sm:gap-6">
+                      <div className="text-center p-4 sm:p-6 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg border border-blue-200">
                         <div className="flex items-center justify-center space-x-2 mb-2">
-                          <span className="text-sm font-medium text-blue-700">Cap Rate</span>
+                          <span className="text-xs sm:text-sm font-medium text-blue-700">Cap Rate</span>
                           {getPerformanceBadge(simpleResult.cap_rate, 0.05, 'higher')}
                         </div>
-                        <div className="text-4xl font-bold text-blue-900">
+                        <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-900">
                           {formatPercentage(simpleResult.cap_rate)}
                         </div>
                         <p className="text-xs text-blue-600 mt-1">Annual return on property value</p>
                       </div>
                       
-                      <div className="text-center p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg border border-green-200">
+                      <div className="text-center p-4 sm:p-6 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg border border-green-200">
                         <div className="flex items-center justify-center space-x-2 mb-2">
-                          <span className="text-sm font-medium text-green-700">Net Operating Income (NOI)</span>
+                          <span className="text-xs sm:text-sm font-medium text-green-700">Net Operating Income (NOI)</span>
                         </div>
-                        <div className="text-4xl font-bold text-green-900">
+                        <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-green-900 break-all">
                           {formatCurrency(simpleResult.noi)}
                         </div>
                         <p className="text-xs text-green-600 mt-1">Annual income after expenses</p>
@@ -461,16 +465,16 @@ const ROICalculator = () => {
             <Card className="w-full">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
-                  <TrendingUp className="h-5 w-5" />
-                  <span>AI Investment Analysis</span>
+                  <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <span className="text-base sm:text-lg">AI Investment Analysis</span>
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-sm">
                   Professional market analysis and investment insights
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
-                  <div className="text-sm text-blue-800 whitespace-pre-line leading-relaxed">
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4 sm:p-6">
+                  <div className="text-xs sm:text-sm text-blue-800 whitespace-pre-line leading-relaxed">
                     {simpleResult.analysis}
                   </div>
                 </div>
@@ -480,8 +484,8 @@ const ROICalculator = () => {
         </TabsContent>
 
         {/* Advanced Calculator */}
-        <TabsContent value="advanced" className="space-y-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <TabsContent value="advanced" className="space-y-6 sm:space-y-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {/* Input Panel */}
             <Card className="lg:col-span-2">
               <CardHeader>
@@ -493,14 +497,14 @@ const ROICalculator = () => {
                   Professional-grade inputs for detailed financial modeling and comprehensive ROI analysis
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-8">
+              <CardContent className="space-y-6 sm:space-y-8">
                 <div className="space-y-2">
                   <Label htmlFor="currency-select-advanced">Currency</Label>
                   <select
                     id="currency-select-advanced"
                     value={currency}
                     onChange={(e) => setCurrency(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full p-2 sm:p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
                   >
                     <option value="$">USD ($)</option>
                     <option value="₦">NGN (₦)</option>
@@ -510,7 +514,7 @@ const ROICalculator = () => {
                   </select>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   <CurrencyInput
                     label="Purchase Price"
                     value={purchasePrice}
@@ -783,16 +787,16 @@ const ROICalculator = () => {
             <Card className="w-full">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
-                  <TrendingUp className="h-5 w-5" />
-                  <span>AI Investment Analysis</span>
+                  <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <span className="text-base sm:text-lg">AI Investment Analysis</span>
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-sm">
                   Professional market analysis and comprehensive investment insights
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
-                  <div className="text-sm text-blue-800 whitespace-pre-line leading-relaxed">
+                <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-4 sm:p-6">
+                  <div className="text-xs sm:text-sm text-blue-800 whitespace-pre-line leading-relaxed">
                     {advancedResult.explanation[0]}
                   </div>
                 </div>

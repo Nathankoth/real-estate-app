@@ -25,7 +25,7 @@ const Dashboard = () => {
         <div className="flex-1 flex flex-col">
           <DashboardHeader />
           
-          <main className="flex-1 p-6 bg-muted/20">
+          <main className="flex-1 p-4 sm:p-6 bg-muted/20">
             <Routes>
               <Route path="/" element={<Overview />} />
               <Route path="/guide" element={<Guide />} />
