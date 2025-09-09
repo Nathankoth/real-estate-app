@@ -16,6 +16,9 @@
     "concurrently": "^8.2.2",
     "rollup": "^4.50.1"
   },
+  "overrides": {
+    "node-domexception": "npm:@empty"
+  },
   "workspaces": [
     "frontend",
     "backend"
