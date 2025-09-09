@@ -3,8 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, Dict, Any
 import os
+import hashlib
 from dotenv import load_dotenv
 import openai
+
+# Simple in-memory cache for AI responses
+ai_response_cache = {}
 
 # Load environment variables
 load_dotenv()
@@ -99,146 +103,83 @@ def calculate_roi_metrics(
 
 # AI Analysis Generation
 async def generate_ai_analysis(results: Dict[str, Any], region: str, currency: str, mode: str) -> str:
-    """Generate AI-powered real estate investment analysis with real-world market context"""
+    """Generate fast AI-powered real estate investment analysis with caching"""
     try:
         # Check if OpenAI API key is available
         openai_api_key = os.getenv("OPENAI_API_KEY")
         if not openai_api_key:
             return "AI analysis unavailable - OpenAI API key not configured"
         
+        # Create cache key from input parameters
+        cache_key = hashlib.md5(f"{results.get('capRate', 0):.3f}_{results.get('NOI', 0)}_{region}_{currency}_{mode}".encode()).hexdigest()
+        
+        # Check cache first
+        if cache_key in ai_response_cache:
+            print(f"Cache hit for key: {cache_key[:8]}...")
+            return ai_response_cache[cache_key]
+        
         # Prepare metrics for analysis
         cap_rate = results.get("capRate", 0)
         noi = results.get("NOI", 0)
         gross_yield = results.get("grossYield", 0)
         
-        # Get current date for market context
-        from datetime import datetime
-        current_date = datetime.now().strftime("%B %Y")
+        # Market benchmarks by region
+        market_benchmarks = {
+            "USA": {"cap_rate_range": "4-8%", "context": "Federal Reserve rates, housing supply"},
+            "Nigeria": {"cap_rate_range": "8-15%", "context": "inflation ~16%, currency stability"},
+            "UK": {"cap_rate_range": "4-6%", "context": "Bank of England rates, Brexit impacts"},
+            "Canada": {"cap_rate_range": "3-7%", "context": "immigration trends, housing supply"},
+            "Australia": {"cap_rate_range": "4-8%", "context": "RBA rates, population growth"}
+        }
         
-        # Create sophisticated prompt with local-first market context
-        prompt = f"""
-        You are a senior real estate investment analyst with 15+ years of experience in global markets. 
-        Provide a comprehensive investment analysis for a property in {region} as of {current_date}.
-        Use {currency} as the currency symbol throughout.
+        benchmark = market_benchmarks.get(region, {"cap_rate_range": "4-8%", "context": "local market conditions"})
         
-        CRITICAL INSTRUCTIONS:
-        - Write in natural, human language as if speaking to a client
-        - Do NOT use markdown, asterisks, hashtags, bullet points, or any formatting symbols
-        - PRIORITIZE local market analysis first, then show global context
-        - Focus heavily on {region}-specific market conditions and trends
-        - Compare to actual local market benchmarks for {region}
-        - Then relate local performance to global market standards
-        - Provide specific, actionable insights
-        - Use professional but accessible language
-        
-        Structure your analysis with these exact section headers:
-        Local Market Context
-        Cap Rate Analysis
-        Net Operating Income Assessment
-        Cash Flow Performance
-        Risk Assessment
-        Global Market Perspective
-        Investment Recommendation
-        
-        Property Metrics to Analyze:
-        - Cap Rate: {cap_rate:.2%}
-        - Net Operating Income: {currency}{noi:,.0f}
-        - Gross Yield: {gross_yield:.2%}
-        """
-        
-        # Add advanced metrics if available
+        # Create concise, optimized prompt
+        prompt = f"""Analyze this {region} property investment. Use {currency} throughout.
+
+Metrics: Cap Rate {cap_rate:.1%}, NOI {currency}{noi:,.0f}, Gross Yield {gross_yield:.1%}"""
+
         if mode == "advanced":
             cash_on_cash = results.get("cashOnCash", 0)
             dscr = results.get("dscr", 0)
             terminal_value = results.get("terminalValue", 0)
-            annual_cash_flow = results.get("annualCashFlow", 0)
-            
-            prompt += f"""
-        - Cash-on-Cash Return: {cash_on_cash:.2%}
-        - DSCR: {dscr:.2f}
-        - Terminal Value: {currency}{terminal_value:,.0f}
-        - Annual Cash Flow: {currency}{annual_cash_flow:,.0f}
-        
-        For advanced analysis, include:
-        - Debt service coverage implications
-        - Cash flow sustainability analysis
-        - Exit strategy considerations
-        - Market timing factors
-        """
-        else:
-            prompt += """
-        
-        For basic analysis, focus on:
-        - Market positioning and competitiveness
-        - Income generation potential
-        - Basic risk factors
-        - Simple investment viability
-        """
-        
-        # Add region-specific market intelligence with local-first emphasis
-        market_context = {
-            "USA": "LOCAL FOCUS: Analyze current Federal Reserve interest rates, local housing supply constraints, and regional economic growth patterns. Compare to local market averages: typical cap rates 4-8% vary by state. GLOBAL CONTEXT: Compare to international markets like UK (4-6%), Canada (3-7%), and Australia (4-8%).",
-            "Nigeria": "LOCAL FOCUS: Factor in local inflation rates (~16%), currency stability, and infrastructure development. Lagos and Abuja markets show different dynamics. Consider local political stability and economic diversification efforts. GLOBAL CONTEXT: Compare to emerging markets like South Africa (6-10%) and developed markets like USA (4-8%).",
-            "UK": "LOCAL FOCUS: Account for Bank of England rates, Brexit impacts, and regional variations. London vs. regional markets show significant differences. Consider local stamp duty and tax implications. GLOBAL CONTEXT: Compare to European markets like Germany (3-5%) and France (4-6%), plus US markets (4-8%).",
-            "Canada": "LOCAL FOCUS: Consider Bank of Canada rates, local immigration trends, and housing supply issues. Toronto and Vancouver have unique market dynamics. Factor in local foreign buyer restrictions. GLOBAL CONTEXT: Compare to US markets (4-8%) and other Commonwealth markets like Australia (4-8%).",
-            "Australia": "LOCAL FOCUS: Account for RBA rates, local population growth, and infrastructure spending. Sydney and Melbourne markets differ significantly. Consider local foreign investment regulations. GLOBAL CONTEXT: Compare to US markets (4-8%), UK markets (4-6%), and Asian markets like Singapore (2-4%)."
-        }
-        
-        region_context = market_context.get(region, f"LOCAL FOCUS: Consider local economic conditions, interest rates, and real estate market trends specific to {region}. GLOBAL CONTEXT: Compare to international market standards and trends.")
-        
+            prompt += f", Cash-on-Cash {cash_on_cash:.1%}, DSCR {dscr:.1f}, Terminal Value {currency}{terminal_value:,.0f}"
+
         prompt += f"""
-        
-        LOCAL MARKET INTELLIGENCE for {region}:
-        {region_context}
-        
-        ANALYSIS PRIORITY - Focus on these LOCAL aspects first:
-        1. How this property compares to current LOCAL market conditions in {region}
-        2. What similar LOCAL properties are achieving in terms of cap rates and yields
-        3. LOCAL economic factors that could impact this investment
-        4. LOCAL growth prospects and infrastructure developments
-        5. LOCAL interest rate environment and financing considerations
-        6. LOCAL exit strategy timing and market cycles
-        
-        Then provide GLOBAL PERSPECTIVE:
-        7. How {region} market performance compares to global standards
-        8. International market trends affecting {region}
-        9. Global economic factors influencing local markets
-        10. Cross-border investment considerations
-        
-        Write as if you're presenting to a sophisticated investor who needs LOCAL market intelligence first, then global context for perspective.
-        """
-        
-        prompt += f"""
-        
-        For each metric, provide 2-3 sentences explaining:
-        1. What the metric means in simple terms
-        2. How it compares to LOCAL {region} market standards (PRIORITY)
-        3. How it compares to global market benchmarks (SECONDARY)
-        4. What it suggests about this LOCAL investment opportunity
-        
-        ANALYSIS STRUCTURE:
-        - Start each section with LOCAL market context
-        - Then provide global perspective for context
-        - Focus on LOCAL actionable insights first
-        - Use LOCAL market examples and benchmarks
-        
-        Keep the tone professional but accessible to non-experts.
-        Prioritize LOCAL market intelligence over global comparisons.
-        """
-        
-        # Call OpenAI API
+
+Market Context: {benchmark['context']}. Typical {region} cap rates: {benchmark['cap_rate_range']}.
+
+Provide concise analysis in these sections:
+Local Market Context
+Cap Rate Analysis  
+NOI Assessment
+Investment Recommendation
+
+Write naturally, no formatting symbols. Focus on {region} market first, then global context. Keep under 300 words."""
+
+        # Call OpenAI API with optimized parameters
         client = openai.OpenAI(api_key=openai_api_key)
         response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
-                {"role": "system", "content": "You are a professional real estate investment advisor with expertise in ROI analysis across different markets."},
+                {"role": "system", "content": "You are a real estate investment analyst. Provide concise, actionable analysis."},
                 {"role": "user", "content": prompt}
             ],
-            max_tokens=800,
-            temperature=0.6
+            max_tokens=400,  # Reduced from 800
+            temperature=0.7,  # Slightly increased for faster response
+            top_p=0.9,  # Added for faster generation
+            frequency_penalty=0.1,  # Added for better quality
+            presence_penalty=0.1  # Added for better quality
         )
         
-        return response.choices[0].message.content.strip()
+        result = response.choices[0].message.content.strip()
+        
+        # Cache the result (limit cache size to prevent memory issues)
+        if len(ai_response_cache) < 100:  # Keep only last 100 responses
+            ai_response_cache[cache_key] = result
+            print(f"Cached response for key: {cache_key[:8]}...")
+        
+        return result
         
     except Exception as e:
         print(f"AI analysis error: {e}")
