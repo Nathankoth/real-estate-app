@@ -48,6 +48,11 @@ const navigationItems = [
     icon: Calculator,
   },
   {
+    title: 'FastAPI ROI Calculator',
+    url: '/dashboard/roi-calculator',
+    icon: Calculator,
+  },
+  {
     title: 'Market Analytics',
     url: '/dashboard/market-analytics',
     icon: TrendingUp,

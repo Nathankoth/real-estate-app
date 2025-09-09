@@ -1,0 +1,11 @@
+id,sold_price,listing_price,rent_annual,sale_date,latitude,longitude,bedrooms,bathrooms,floor_area_sqm,property_type,year_built,neighborhood,source
+1,450000,475000,36000,2024-01-15,30.2672,-97.7431,3,2.0,120.0,residential,2015,Downtown Austin,Zillow
+2,520000,550000,42000,2024-02-20,30.2672,-97.7431,4,2.5,150.0,residential,2018,South Austin,Redfin
+3,380000,400000,30000,2024-03-10,30.2672,-97.7431,2,1.5,90.0,residential,2012,East Austin,Zillow
+4,650000,680000,54000,2024-04-05,30.2672,-97.7431,4,3.0,180.0,residential,2020,West Austin,Redfin
+5,420000,440000,33000,2024-05-12,30.2672,-97.7431,3,2.0,110.0,residential,2016,North Austin,Zillow
+6,580000,600000,48000,2024-06-18,30.2672,-97.7431,4,2.5,160.0,residential,2019,Central Austin,Redfin
+7,350000,370000,27000,2024-07-25,30.2672,-97.7431,2,1.0,85.0,residential,2014,East Austin,Zillow
+8,720000,750000,60000,2024-08-30,30.2672,-97.7431,5,3.5,200.0,residential,2021,West Austin,Redfin
+9,480000,500000,39000,2024-09-15,30.2672,-97.7431,3,2.0,130.0,residential,2017,South Austin,Zillow
+10,620000,650000,51000,2024-10-22,30.2672,-97.7431,4,2.5,170.0,residential,2020,North Austin,Redfin

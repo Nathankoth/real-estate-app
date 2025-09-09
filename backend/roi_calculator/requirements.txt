@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+streamlit
+psycopg2-binary
+pandas
+numpy
+scikit-learn
+lightgbm
+python-dotenv
+sqlalchemy
+numpy-financial

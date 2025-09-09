@@ -1,18 +1,19 @@
 {
-  "name": "real-estate-backend",
+  "name": "roi-ai-server",
   "version": "1.0.0",
-  "description": "FastAPI backend for Real Estate App",
-  "main": "app.py",
+  "description": "Express.js AI server for ROI explanations",
+  "main": "express_ai_server.js",
+  "type": "module",
   "scripts": {
-    "start": "source venv/bin/activate && python -m uvicorn app:app --reload --host 0.0.0.0 --port 3001",
-    "dev": "source venv/bin/activate && python -m uvicorn app:app --reload --host 0.0.0.0 --port 3001",
-    "build": "echo 'Backend build complete'",
-    "install": "python3 -m venv venv && source venv/bin/activate && pip install -r requirements.txt"
+    "start": "node express_ai_server.js",
+    "dev": "node express_ai_server.js"
   },
-  "engines": {
-    "python": ">=3.8.0"
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^3.3.2",
+    "dotenv": "^16.3.1"
   },
-  "keywords": ["fastapi", "python", "real-estate", "api"],
-  "author": "Real Estate App",
+  "keywords": ["roi", "ai", "real-estate", "express"],
+  "author": "",
   "license": "MIT"
 }

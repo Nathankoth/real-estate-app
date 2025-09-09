@@ -111,3 +111,87 @@ def compute_and_store_property_roi(property_id: int):
 
 # Example invocation:
 # print(compute_and_store_property_roi(1))
+
+def interpret_results(cap: float, coc: float, dscr_val: float, local_refs: Dict[str, float]) -> List[str]:
+    """
+    local_refs: e.g. {'cap_low':0.04, 'cap_high':0.08, 'coc_target':0.08, 'dscr_min':1.2}
+    Returns list of human readable strings.
+    """
+    notes = []
+    if cap <= 0:
+        notes.append("Cap rate could not be calculated due to missing inputs.")
+    else:
+        if cap < local_refs.get('cap_low', 0.05):
+            notes.append(f"Cap Rate {cap*100:.2f}% — below local low ({local_refs.get('cap_low')*100:.2f}%), indicates pricing leans toward appreciation instead of current income.")
+        elif cap > local_refs.get('cap_high', 0.08):
+            notes.append(f"Cap Rate {cap*100:.2f}% — higher than typical ({local_refs.get('cap_high')*100:.2f}%), indicates strong current income or undervaluation.")
+        else:
+            notes.append(f"Cap Rate {cap*100:.2f}% — within typical local range.")
+
+    if math.isnan(coc):
+        notes.append("Cash-on-Cash could not be calculated (missing equity or cash flow).")
+    else:
+        if coc < local_refs.get('coc_target', 0.08):
+            notes.append(f"Cash-on-Cash {coc*100:.2f}% — lower than typical investor target ({local_refs.get('coc_target')*100:.2f}%).")
+        else:
+            notes.append(f"Cash-on-Cash {coc*100:.2f}% — meets investor yield targets.")
+
+    if dscr_val < local_refs.get('dscr_min', 1.2):
+        notes.append(f"DSCR {dscr_val:.2f} — below typical lender minimum ({local_refs.get('dscr_min')}), financing may be harder or require higher rates.")
+    else:
+        notes.append(f"DSCR {dscr_val:.2f} — adequate coverage for typical lenders.")
+
+    return notes
+
+def compute_roi_from_inputs(inputs: Dict[str, float], local_refs: Dict[str, float] = None) -> Dict[str, Any]:
+    """
+    inputs keys:
+       purchase_price, gross_rent_annual, vacancy_rate, operating_expenses,
+       annual_mortgage_payment, equity, hold_years (int), renovation_cost (optional)
+    """
+    if local_refs is None:
+        local_refs = {'cap_low': 0.03, 'cap_high': 0.08, 'coc_target': 0.08, 'dscr_min': 1.2, 'discount_rate': 0.10}
+    
+    purchase_price = float(inputs.get('purchase_price', 0))
+    gross_rent_annual = float(inputs.get('gross_rent_annual', 0))
+    vacancy_rate = float(inputs.get('vacancy_rate', 0.10))
+    operating_expenses = float(inputs.get('operating_expenses', 0))
+    annual_mortgage_payment = float(inputs.get('annual_mortgage_payment', 0))
+    equity = float(inputs.get('equity', purchase_price * 0.20))
+    hold_years = int(inputs.get('hold_years', 5))
+    renovation_cost = float(inputs.get('renovation_cost', 0))
+
+    egi_val = effective_gross_income(gross_rent_annual, vacancy_rate)
+    noi_val = noi(egi_val, operating_expenses)
+    cap = cap_rate(noi_val, purchase_price)
+    gross_y = gross_yield(gross_rent_annual, purchase_price)
+    pre_cf = pre_tax_cash_flow(noi_val, annual_mortgage_payment)
+    coc = cash_on_cash(pre_cf, equity)
+    dscr_val = dscr(noi_val, annual_mortgage_payment)
+
+    # simple DCF projection example (no growth assumed, you can expand)
+    # CF0 = -equity - renovation_cost (initial outflow). Years 1..hold_years = pre_cf.
+    cash_flows = [-equity - renovation_cost] + [pre_cf for _ in range(hold_years)]
+    # assume terminal value using terminal cap rate = local cap median
+    terminal_cap = (local_refs.get('cap_low') + local_refs.get('cap_high'))/2 or 0.05
+    tv = noi_val / terminal_cap if terminal_cap else 0
+    cash_flows[-1] += tv  # add terminal value to last year
+    npv_val = npv(cash_flows, local_refs.get('discount_rate', 0.10))
+    irr_val = irr(cash_flows)
+
+    explanation = interpret_results(cap, coc, dscr_val, local_refs)
+
+    return {
+        "egi": egi_val,
+        "noi": noi_val,
+        "cap_rate": cap,
+        "gross_yield": gross_y,
+        "pre_tax_cash_flow": pre_cf,
+        "cash_on_cash": coc,
+        "dscr": dscr_val,
+        "npv": npv_val,
+        "irr": irr_val,
+        "explanation": explanation,
+        "cash_flows": cash_flows,
+        "terminal_value": tv
+    }

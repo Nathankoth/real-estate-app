@@ -6,6 +6,7 @@ import Overview from '@/components/dashboard/Overview';
 import Guide from '@/components/dashboard/Guide';
 import AIGuide from '@/components/dashboard/AIGuide';
 import ROICalculator from '@/components/dashboard/ROICalculator';
+import FastAPIRoiCalculator from '@/components/FastAPIRoiCalculator';
 import ImageGenerator from '@/components/dashboard/ImageGenerator';
 import { ThreeDGenerator } from '@/components/dashboard/ThreeDGenerator';
 import Projects from '@/components/dashboard/Projects';
@@ -13,7 +14,6 @@ import MarketAnalytics from '@/components/dashboard/MarketAnalytics';
 import DesignTools from '@/components/dashboard/DesignTools';
 import AIVisualization from '@/components/dashboard/AIVisualization';
 import Security from '@/components/dashboard/Security';
-import FastAPIRoiCalculator from '@/components/dashboard/FastAPIRoiCalculator';
 import FastAPIDesignGenerator from '@/components/dashboard/FastAPIDesignGenerator';
 
 const Dashboard = () => {
@@ -31,6 +31,7 @@ const Dashboard = () => {
               <Route path="/guide" element={<Guide />} />
               <Route path="/ai-guide" element={<AIGuide />} />
               <Route path="/roi" element={<ROICalculator />} />
+              <Route path="/roi-calculator" element={<FastAPIRoiCalculator />} />
               <Route path="/2d-generator" element={<ImageGenerator />} />
               <Route path="/3d-generator" element={<ThreeDGenerator />} />
               <Route path="/projects" element={<Projects />} />
@@ -38,7 +39,6 @@ const Dashboard = () => {
               <Route path="/design-tools" element={<DesignTools />} />
               <Route path="/ai-visualization" element={<AIVisualization />} />
               <Route path="/security" element={<Security />} />
-              <Route path="/fastapi-roi" element={<FastAPIRoiCalculator />} />
               <Route path="/fastapi-design" element={<FastAPIDesignGenerator />} />
               <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
