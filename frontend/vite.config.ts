@@ -26,6 +26,9 @@ export default defineConfig(() => ({
           router: ['react-router-dom']
         }
       }
-    }
+    },
+    // Ensure consistent build output
+    target: 'esnext',
+    minify: 'esbuild'
   }
 }));
