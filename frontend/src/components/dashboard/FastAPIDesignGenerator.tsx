@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Palette, Loader2, Download, RefreshCw } from 'lucide-react';
-import { designApi } from '@/lib/api';
+import { designApi } from '../../lib/api';
 import { toast } from 'sonner';
 
 const FastAPIDesignGenerator = () => {

@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from 'recharts';
 import { Calculator, TrendingUp, TrendingDown, DollarSign, Loader2, PlusCircle, Calendar } from 'lucide-react';
-import { financeApi } from '@/lib/api';
+import { financeApi } from '../../lib/api';
 import { useROIEntries } from '@/hooks/useROIEntries';
 import { useToast } from '@/hooks/use-toast';
 import { format } from 'date-fns';

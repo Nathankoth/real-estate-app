@@ -12,7 +12,7 @@ import {
   Home,
   Palette
 } from 'lucide-react';
-import { guideApi } from '@/lib/api';
+import { guideApi } from '../../lib/api';
 import { toast } from 'sonner';
 
 const AIGuide = () => {
