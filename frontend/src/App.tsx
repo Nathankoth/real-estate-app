@@ -1,42 +1,27 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { Toaster } from "@/components/ui/sonner";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "@/hooks/use-auth";
-import Index from "./pages/Index";
-import Auth from "./pages/Auth";
-import Dashboard from "./pages/Dashboard";
-import Pricing from "./pages/Pricing";
-import ProtectedRoute from "./components/ProtectedRoute";
-import AuthCallback from "./components/AuthCallback";
-
-const queryClient = new QueryClient();
+import './App.css';
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Router>
-          <div className="min-h-screen bg-background">
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/auth/callback" element={<AuthCallback />} />
-              <Route path="/pricing" element={<Pricing />} />
-              <Route 
-                path="/dashboard/*" 
-                element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-            <Toaster />
+    <div className="App">
+      <header className="App-header">
+        <h1>Welcome to Real Estate App</h1>
+        <p>A simple, clean real estate application</p>
+        <div className="features">
+          <div className="feature-card">
+            <h3>🏠 Property Search</h3>
+            <p>Find your dream home</p>
           </div>
-        </Router>
-      </AuthProvider>
-    </QueryClientProvider>
+          <div className="feature-card">
+            <h3>💰 ROI Calculator</h3>
+            <p>Calculate investment returns</p>
+          </div>
+          <div className="feature-card">
+            <h3>🎨 Design Tools</h3>
+            <p>Visualize your space</p>
+          </div>
+        </div>
+      </header>
+    </div>
   );
 }
 
