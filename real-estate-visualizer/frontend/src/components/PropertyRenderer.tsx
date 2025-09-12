@@ -73,7 +73,7 @@ const Room: React.FC<{
 
 const Property3D: React.FC<PropertyRendererProps> = ({ propertyData, onRenderComplete }) => {
   const [selectedRoom, setSelectedRoom] = useState<number | null>(null);
-  const { camera, gl } = useThree();
+  const { gl } = useThree();
 
   useEffect(() => {
     // Capture render when component mounts
